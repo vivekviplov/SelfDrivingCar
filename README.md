@@ -119,4 +119,4 @@ A sample of driving_log.csv file is shown in Figure 9.
 * *Column 7:*  contains the speed of the vehicle 
 
 ![9](https://github.com/vivekviplov/SelfDrivingCar/blob/main/Screenshot%202025-07-06%20170107.png)
-*Fig. 9: Driving_log_csv*
+**Fig. 9: Driving_log_csv**
