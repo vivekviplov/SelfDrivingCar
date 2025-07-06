@@ -120,3 +120,58 @@ A sample of driving_log.csv file is shown in Figure 9.
 
 ![9](https://github.com/vivekviplov/SelfDrivingCar/blob/main/Screenshot%202025-07-06%20170107.png)
 **Fig. 9: Driving_log_csv**
+
+
+## Augmentation and image pre-processing
+The biggest challenge was generalizing the behavior of the car on Track_2 which it was never trained for. In a real-life situation, we can never train a self-driving car model for every track possible, as the data will be too huge to process. Also, it is not possible to gather the dataset for all the weather conditions and roads. Thus, there is a need to come up with an idea of generalizing the behavior on different tracks. This problem is solved using image preprocessing and augmentation techniques.
+
+## Network architectures
+
+The design of the network is based on the NVIDIA model, which has been used by NVIDIA for the end-to-end self driving test. As such, it is well suited for the project.It is a deep convolution network which works well with supervised image classification / regression problems. As the NVIDIA model is well documented, I was able to focus how to adjust the training images to produce the best result with some adjustments to the model to avoid overfitting and adding non-linearity to improve the prediction.
+
+I've added the following adjustments to the model.
+
+- I used Lambda layer to normalized input images to avoid saturation and make gradients work better.
+- I've added an additional dropout layer to avoid overfitting after the convolution layers.
+- I've also included ELU for activation function for every layer except for the output layer to introduce non-linearity.
+
+In the end, the model looks like as follows:
+
+- Image normalization
+- Convolution: 5x5, filter: 24, strides: 2x2, activation: ELU
+- Convolution: 5x5, filter: 36, strides: 2x2, activation: ELU
+- Convolution: 5x5, filter: 48, strides: 2x2, activation: ELU
+- Convolution: 3x3, filter: 64, strides: 1x1, activation: ELU
+- Convolution: 3x3, filter: 64, strides: 1x1, activation: ELU
+- Drop out (0.5)
+- Fully connected: neurons: 100, activation: ELU
+- Fully connected: neurons: 50, activation: ELU
+- Fully connected: neurons: 10, activation: ELU
+- Fully connected: neurons: 1 (output)
+
+As per the NVIDIA model, the convolution layers are meant to handle feature engineering and the fully connected layer for predicting the steering angle. However, as stated in the NVIDIA document, it is not clear where to draw such a clear distinction. Overall, the model is very functional to clone the given steering behavior. The below is a model structure output from the Keras which gives more details on the shapes and the number of parameters.
+
+We will design our Model architecture. We have to classify the traffic signs too that's why we need to shift from Lenet 5 model to NVDIA model. With behavioural cloning, our dataset is much more complex then any dataset we have used. We are dealing with images that have (200,66) dimensions. Our current datset has 5386 images to train with but MNSIT has around 60,000 images to train with. Our behavioural cloning code has simply has to return appropriate steering angle which is a regression type example. For these things, we need a more advanced model which is provided by nvdia and known as nvdia model.
+
+For defining the model architecture, we need to define the model object. Normalization state can be skipped as we have already normalized it. We will add the convolution layer. As compared to the model, we will organize accordingly. The Nvdia model uses 24 filters in the layer along with a kernel of size 5,5. We will introduce sub sampling. The function reflects to stride length of the kernel as it processes through an image, we have large images. Horizontal movement with 2 pixels at a time, similarly vertical movement to 2 pixels at a time. As this is the first layer, we have to define input shape of the model too i.e., (66,200,3) and the last function is an activation function that is “elu”.
+
+Revisting the model, we see that our second layer has 36 filters with kernel size (5,5) same subsampling option with stride length of (2,2) and conclude this layer with activation ‘elu’.
+
+According to Nvdia model, it shows we have 3 more layers in the convolutional neural network. With 48 filters, with 64 filters (3,3) kernel 64 filters (3,3) kernel Dimensions have been reduced significantly so for that we will remove subsampling from 4th and 5th layer.
+
+Next we add a flatten layer. We will take the output array from previous convolution neural network to convert it into a one dimensional array so that it can be fed to fully connected layer to follow.
+
+Our last convolution layer outputs an array shape of (1,18) by 64.
+
+We end the architecture of Nvdia model with a dense layer containing a single output node which will output the predicted steering angle for our self driving car. Now we will use model.compile() to compile our architecture as this is a regression type example the metrics that we will be using will be mean squared error and optimize as Adam. We will be using relatively a low learning rate that it can help on accuracy. We will use dropout layer to avoid overfitting the data. Dropout Layer sets the input of random fraction of nodes to “0” during each update. During this, we will generate the training data as it is forced to use a variety of combination of nodes to learn from the same data. We will have to separate the convolution layer from fully connected layer with a factor of 0.5 is added so it converts 50 percent of the input to 0. We Will define the model by calling the nvdia model itself. Now we will have the model training process.To define training parameters, we will use model.fit(), we will import our training data X_Train, training data -&gt;y_train, we have less data on the datasets we will require more epochs to be effective. We will use validation data and then use Batch size.
+
+
+## Results
+
+The following results were observed for described architectures. I had to come up with two different performance metrics. 
+- Value loss or Accuracy (computed during training phase) 
+- Generalization on Track 1 (drive performance)
+
+### Why We Use ELU Over RELU
+
+We can have dead relu this is when a node in neural network essentially dies and only feeds a value of zero to nodes which follows it. We will change from relu to elu. Elu function has always a chance to recover and fix it errors means it is in a process of learning and contributing to the model. We will plot the model and then save it accordingly in h5 format for a keras file.
