@@ -172,6 +172,12 @@ The following results were observed for described architectures. I had to come u
 - Value loss or Accuracy (computed during training phase) 
 - Generalization on Track 1 (drive performance)
 
+- ![10](https://github.com/vivekviplov/SelfDrivingCar/blob/main/Screenshot%202025-07-06%20171347.png)
+
+
+
+- ![11](https://github.com/vivekviplov/SelfDrivingCar/blob/main/Screenshot%202025-07-06%20171411.png)
+
 ### Why We Use ELU Over RELU
 
 We can have dead relu this is when a node in neural network essentially dies and only feeds a value of zero to nodes which follows it. We will change from relu to elu. Elu function has always a chance to recover and fix it errors means it is in a process of learning and contributing to the model. We will plot the model and then save it accordingly in h5 format for a keras file.
