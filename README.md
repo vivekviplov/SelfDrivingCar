@@ -104,3 +104,5 @@ The simulator’s feature to create your own dataset of images makes it easy to 
 - Along with the image dataset, it also generates a datalog.csv file. This file contains the image paths with corresponding steering angle, throttle, brakes, and speed of the car at that instance. 
 
 A few images from the dataset are shown below .
+![Driving Sample](https://github.com/your-username/your-repo-name/raw/main/IMG/center_2025_06_30_22_28_47_412.jpg)
+
