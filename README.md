@@ -110,3 +110,13 @@ A few images from the dataset are shown below .
 ![Driving Sample](https://github.com/vivekviplov/SelfDrivingCar/blob/main/right_2025_06_30_22_37_52_147.jpg)
 
 
+A sample of driving_log.csv file is shown in Figure 9.
+
+* *Column 1, 2, 3:*  contains paths to the dataset images of center, right and left respectively Column 4: contains the steering angle 
+* *Column 4:*  value as 0 depicts straight, positive value is right turn and negative value is left turn. 
+* *Column 5:*  contains the throttle or acceleration at that instance 
+* *Column 6:*  contains the brakes or deceleration at that instance 
+* *Column 7:*  contains the speed of the vehicle 
+
+![driving_log.csv]()
+
