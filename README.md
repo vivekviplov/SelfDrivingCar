@@ -118,5 +118,5 @@ A sample of driving_log.csv file is shown in Figure 9.
 * *Column 6:*  contains the brakes or deceleration at that instance 
 * *Column 7:*  contains the speed of the vehicle 
 
-![driving_log.csv]()
+![9](https://github.com/vivekviplov/SelfDrivingCar/blob/main/Screenshot%202025-07-06%20170107.png)
 
